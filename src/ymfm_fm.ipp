@@ -519,7 +519,10 @@ template<class RegisterType>
 void fm_operator<RegisterType>::keyonoff(uint32_t on, keyon_type type)
 {
 	m_keyon_live = (m_keyon_live & ~(1 << int(type))) | (bitfield(on, 0) << int(type));
-	// clock the key state
+	// clock the key state; start_attack() reads the attack rate from the
+	// cache, so bring it up to date with the registers first (until the first
+	// prepare(), it isn't even initialized)
+	m_regs.cache_operator_data(m_choffs, m_opoffs, m_cache);
 	clock_keystate(uint32_t(m_keyon_live != 0));
 	m_keyon_live &= ~(1 << KEYON_CSM);
 }
