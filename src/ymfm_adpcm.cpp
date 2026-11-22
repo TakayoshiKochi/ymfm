@@ -480,9 +480,13 @@ void adpcm_b_channel::clock()
 			// handle the sample end, either repeating or stopping
 			if (at_end())
 			{
-				// if repeating, go back to the start
+				// if repeating, go back to the start; the chip raises
+				// EOS at the end of each loop too
 				if (m_regs.repeat())
+				{
 					load_start();
+					m_status |= STATUS_EOS;
+				}
 
 				// otherwise, done; set the EOS bit
 				else

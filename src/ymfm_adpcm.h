@@ -328,6 +328,9 @@ public:
 	// return the status register
 	uint8_t status() const { return m_status; }
 
+	// clear the EOS flag (the chip's flag reset)
+	void clear_eos() { m_status &= ~STATUS_EOS; }
+
 	// handle special register reads
 	uint8_t read(uint32_t regnum);
 
@@ -392,6 +395,9 @@ public:
 
 	// status
 	uint8_t status() const { return m_channel->status(); }
+
+	// clear the EOS flag (the chip's flag reset)
+	void clear_eos() { m_channel->clear_eos(); }
 
 	// return a reference to our interface
 	ymfm_interface &intf() { return m_intf; }

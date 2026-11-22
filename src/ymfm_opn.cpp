@@ -1235,9 +1235,13 @@ void ym2608::write_data_hi(uint8_t data)
 	}
 	else if (m_address == 0x110)
 	{
-		// 110: IRQ flag control
+		// 110: IRQ flag control; the flag reset clears ADPCM-B's EOS too,
+		// which read_status_hi() would otherwise merge back in
 		if (bitfield(data, 7))
+		{
 			m_fm.set_reset_status(0, 0xff);
+			m_adpcm_b.clear_eos();
+		}
 		else
 		{
 			m_flag_control = data;
